@@ -25,11 +25,6 @@ Layout/HashAlignment:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Metrics/BlockLength:
-  Exclude:
-    - "config/**/*"
-    - "spec/**/*"
-
 Metrics/MethodLength:
   Enabled: false
 
