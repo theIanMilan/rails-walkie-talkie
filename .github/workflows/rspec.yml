@@ -1,0 +1,51 @@
+name: RSpec
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.3
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: |
+        bundle install
+    - name: Setup Database
+      run: |
+        yarn install --check-files
+        bundle exec rake db:create
+        bundle exec rake db:schema:load
+      env:
+        DATABASE_HOST: 127.0.0.1
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+
+    - name: Run Rubocop
+      run: bundle exec rubocop
+
+    - name: Run Tests
+      run: bundle exec rspec
+      env:
+        DATABASE_HOST: 127.0.0.1
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        TALKPUSH_API_KEY: ${{ secrets.TALKPUSH_API_KEY }}
+        TALKPUSH_API_SECRET: ${{ secrets.TALKPUSH_API_SECRET }}
+        TALKPUSH_CAMPAIGN_ID: ${{ secrets.TALKPUSH_CAMPAIGN_ID }}
