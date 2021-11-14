@@ -39,4 +39,5 @@
 yarn-debug.log*
 .yarn-integrity
 
+client_secret.json
 .env

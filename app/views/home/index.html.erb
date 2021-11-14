@@ -1,0 +1,31 @@
+<section>
+  <h1>Home</h1>
+  
+  <div>
+    <button id="button-read-sheets">Force read Google Sheets</button>
+    <div id="message"></div>
+
+    <div class="time-updates">
+      <div id="message-current-time" class="description">Current time: <span id="clock-wrapper"></span></div>
+      <%# <div id="message-next-update" class="description">Next update:  <span>December 2021</span></div> %>
+      <div>Current rows in <a href="https://docs.google.com/spreadsheets/d/1xkofJa5iI3AQE4yWEoHqMTQ1QQ-VDsfUDDwV96QQDVM/edit#gid=1728808833">Google Sheets</a>: <span><strong><%= @gs_actual_rows %></strong></span></div>
+      
+      <br>
+      
+      <div id="message-last-update" class="description">Last updated: 
+        <span><strong><%= @gs_tracker.updated_at.strftime('%A, %B %d, %Y, %I:%M:%S %p')%></strong></span>
+      </div>
+      <div>Read rows per database: <span><strong><%= @gs_tracker.rows  %></strong></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Live Clock
+  let clockWrapper = document.querySelector('#clock-wrapper')
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+  setInterval(function() {
+    clockWrapper.textContent = new Date().toLocaleString('en-US', options);
+  }, 1000);
+</script>
