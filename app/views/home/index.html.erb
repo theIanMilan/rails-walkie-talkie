@@ -2,20 +2,21 @@
   <h1>Home</h1>
   
   <div>
-    <button id="button-read-sheets">Force read Google Sheets</button>
-    <div id="message"></div>
+    <a href="/route"><button id="button-read-sheets" disabled="true">Read and Update Google Sheets</button></a>
+    <div id="message">Already up to date!</div>
 
+    <br>
     <div class="time-updates">
       <div id="message-current-time" class="description">Current time: <span id="clock-wrapper"></span></div>
       <%# <div id="message-next-update" class="description">Next update:  <span>December 2021</span></div> %>
-      <div>Current rows in <a href="https://docs.google.com/spreadsheets/d/1xkofJa5iI3AQE4yWEoHqMTQ1QQ-VDsfUDDwV96QQDVM/edit#gid=1728808833">Google Sheets</a>: <span><strong><%= @gs_actual_rows %></strong></span></div>
+      <div>Current rows in <a href="https://docs.google.com/spreadsheets/d/1xkofJa5iI3AQE4yWEoHqMTQ1QQ-VDsfUDDwV96QQDVM/edit#gid=1728808833">Google Sheets</a>: <span id="rows-per-gs"><strong><%= @gs_actual_rows %></strong></span></div>
       
       <br>
       
       <div id="message-last-update" class="description">Last updated: 
         <span><strong><%= @gs_tracker.updated_at.strftime('%a, %d %b %Y %X GMT')%></strong></span>
       </div>
-      <div>Read rows per database: <span><strong><%= @gs_tracker.rows  %></strong></span></div>
+      <div>Read rows per database: <span id="rows-per-db"><strong><%= @gs_tracker.rows  %></strong></span></div>
     </div>
   </div>
 </section>
@@ -28,4 +29,18 @@
   setInterval(function() {
     clockWrapper.textContent = new Date().toUTCString('en-US', options);
   }, 1000);
+
+  // Disable button after DOM has loaded and conditions fulfilled
+  document.addEventListener('DOMContentLoaded', function() {
+    var updateButton = document.querySelector('#button-read-sheets');
+    var updateMessage = document.querySelector('#message');
+    var rowsGS = document.querySelector('#rows-per-gs');
+    var rowsDB = document.querySelector('#rows-per-db');
+
+    if (parseInt(rowsGS.textContent) !== parseInt(rowsDB.textContent)) {
+      updateButton.disabled = false;
+      updateMessage.style.display = 'none';
+    }
+  });
+
 </script>

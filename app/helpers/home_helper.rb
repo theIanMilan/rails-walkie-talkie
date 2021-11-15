@@ -1,19 +1,33 @@
 module HomeHelper
   require 'google_drive'
+  require 'uri'
+  require 'net/http'
+  require 'json'
 
-  def comment
-    # @api_token = '1'
-    # api_link = ""
+  def talkpush_api_create_new_candidate(fname, lname, email, phone_num)
+    url = URI("https://my.talkpush.com/api/talkpush_services/campaigns/#{ENV.fetch('TALKPUSH_CAMPAIGN_ID').to_i}/campaign_invitations")
 
-    # uri = URI.parse(api_link)
-    # http = Net::HTTP.new(uri.host, uri.port)
-    # http.use_ssl = true
-    # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    # request = Net::HTTP::Get.new(uri.request_uri)
-    # response = http.request(request)
+    http = Net::HTTP.new(url.host, url.port)
 
-    # parsed_results = JSON.parse(response.body)
-    # parsed_results['data']
+    request = Net::HTTP::Post.new(url)
+    request['Content-Type'] = 'application/json'
+    request['Cache-Control'] = 'no-cache'
+
+    json_hash = {
+      api_key: ENV.fetch('TALKPUSH_API_KEY'),
+      api_secret: ENV.fetch('TALKPUSH_API_SECRET'),
+      campaign_invitation: {
+        first_name: fname,
+        last_name: lname,
+        email: email,
+        user_phone_number: phone_num
+      }
+    }
+    request.body = JSON.generate(json_hash)
+
+    response = http.request(request)
+    puts response.read_body
+    puts response.status
   end
 
   def read_google_sheets_row_count
