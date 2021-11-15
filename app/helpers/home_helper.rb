@@ -18,7 +18,7 @@ module HomeHelper
 
   def read_google_sheets_row_count
     worksheet = create_google_sheets_session_and_get_worksheet
-    worksheet.rows.count
+    worksheet.num_rows
   end
 
   def create_google_sheets_session_and_get_worksheet
