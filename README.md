@@ -23,5 +23,5 @@ Resource: [1](https://elements.heroku.com/buildpacks/buyersight/heroku-google-ap
 To make the .json credentials file by Google API available to Heroku, a buildpack was used to generate the `google-credentials.json` from heroku's config vars so it can be made available to the application without explicitly committing sensitive credentials.
 
 #### On GitHub Actions
-<!-- todo: https://docs.github.com/en/actions/security-guides/encrypted-secrets -->
-Currently, the .json is not part of the GitHub workflow and as such all RSpec tests requiring Google API credentials fail. Locally however, RSpec tests pass. TODO: Encrypt .json for use in Github workflow.
+Reference: (GitHub Encrypted secrets)[https://docs.github.com/en/actions/security-guides/encrypted-secrets#limits-for-secrets]
+google-credentials.json was encrypted using gpg and made available to GitHub Actions by decryption. 
