@@ -30,6 +30,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 # Read Google Drive/Google Sheets
 gem 'google_drive'
+gem 'httparty'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
